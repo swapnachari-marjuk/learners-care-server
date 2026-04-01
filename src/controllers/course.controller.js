@@ -16,4 +16,19 @@ const saveCourses = async (req, res) => {
   }
 };
 
-module.exports = { saveCourses };
+const getCourses = async (req, res) => {
+  try {
+    const coursesColl = getCollection("courses");
+    const result = await coursesColl.find({}).toArray();
+    res.status(200).send(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({
+      success: false,
+      message: "internal server error during getting courses!",
+      error: err.message,
+    });
+  }
+};
+
+module.exports = { saveCourses, getCourses };
