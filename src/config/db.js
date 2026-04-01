@@ -18,7 +18,7 @@ let db;
 const connectDB = async () => {
   await client.connect();
   db = client.db("learnersCareDb");
-  console.log(" MongoDB Connected via Shared Utility!");
+  console.log("MongoDB Connected via Shared Utility!");
 };
 
 // getting coll.s

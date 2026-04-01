@@ -11,6 +11,7 @@ app.use(express.json());
 app.use("/api/users", userRouter);
 app.use("/api/courses", courseRouter);
 
+
 app.get("/", (req, res) => {
   res.send("Learners Care Server is Peeking! 👀");
 });

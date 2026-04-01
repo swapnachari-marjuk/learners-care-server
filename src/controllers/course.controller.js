@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { getCollection } = require("../config/db");
 const saveCourses = async (req, res) => {
   try {
@@ -31,4 +32,24 @@ const getCourses = async (req, res) => {
   }
 };
 
-module.exports = { saveCourses, getCourses };
+const getSingleCourse = async (req, res) => {
+  const { id } = req.params;
+  //   console.log("params id is",id);
+  try {
+    const coursesColl = getCollection("courses");
+    const filter = new ObjectId(id.trim());
+    // console.log(filter);
+    const result = await coursesColl.findOne({ _id: filter });
+    console.log(result);
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: "internal server error during getting courses!",
+      error: error.message,
+    });
+  }
+};
+
+module.exports = { saveCourses, getCourses, getSingleCourse };
