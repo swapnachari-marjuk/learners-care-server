@@ -1,4 +1,5 @@
 const { getCollection } = require("../config/db");
+
 const saveUser = async (req, res) => {
   try {
     const user = req.body;

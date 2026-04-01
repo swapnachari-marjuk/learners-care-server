@@ -1,5 +1,6 @@
 const { ObjectId } = require("mongodb");
 const { getCollection } = require("../config/db");
+
 const saveCourses = async (req, res) => {
   try {
     const courseData = req.body;
@@ -50,6 +51,40 @@ const getSingleCourse = async (req, res) => {
   }
 };
 
+const updateCourse = async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (!ObjectId.isValid(id)) {
+      return res.status(400).send({
+        message: "Object is invalid. Try with valid objectId.",
+      });
+    }
+
+    const coursesColl = getCollection("courses");
+    const updatedData = req.body;
+    const filter = { _id: new ObjectId(id) };
+    const updateDoc = {
+      $set: updatedData,
+    };
+    const result = await coursesColl.updateOne(filter, updateDoc);
+
+    if (result.matchedCount === 0) {
+      return res.status(404).send({
+        success: false,
+        message: "No course found with this ID to update.",
+      });
+    }
+
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      error,
+    });
+  }
+};
+
 const deleteCourse = async (req, res) => {
   const { id } = req.params;
   try {
@@ -66,4 +101,10 @@ const deleteCourse = async (req, res) => {
   }
 };
 
-module.exports = { saveCourses, getCourses, getSingleCourse, deleteCourse };
+module.exports = {
+  saveCourses,
+  getCourses,
+  getSingleCourse,
+  deleteCourse,
+  updateCourse,
+};
