@@ -21,7 +21,13 @@ const saveCourses = async (req, res) => {
 const getCourses = async (req, res) => {
   try {
     const coursesColl = getCollection("courses");
-    const result = await coursesColl.find({}).toArray();
+    const {search} = req.query;
+
+    let query = {};
+    if (search) {
+      query = { title: { $regex: search, $options: "i" } };
+    }
+    const result = await coursesColl.find(query).toArray();
     res.status(200).send(result);
   } catch (err) {
     console.error(err);
