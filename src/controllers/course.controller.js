@@ -34,11 +34,9 @@ const getCourses = async (req, res) => {
 
 const getSingleCourse = async (req, res) => {
   const { id } = req.params;
-  //   console.log("params id is",id);
   try {
     const coursesColl = getCollection("courses");
     const filter = new ObjectId(id.trim());
-    // console.log(filter);
     const result = await coursesColl.findOne({ _id: filter });
     console.log(result);
     res.status(200).send(result);
@@ -52,4 +50,20 @@ const getSingleCourse = async (req, res) => {
   }
 };
 
-module.exports = { saveCourses, getCourses, getSingleCourse };
+const deleteCourse = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const coursesColl = getCollection("courses");
+    const filter = new ObjectId(id);
+    const result = await coursesColl.deleteOne({ _id: filter });
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      error,
+    });
+  }
+};
+
+module.exports = { saveCourses, getCourses, getSingleCourse, deleteCourse };
