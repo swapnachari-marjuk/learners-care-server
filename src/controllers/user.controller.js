@@ -3,8 +3,15 @@ const { getCollection } = require("../config/db");
 const saveUser = async (req, res) => {
   try {
     const user = req.body;
-    // console.log("Saving user to logic layer:", user);
     const usersColl = getCollection("users");
+    let isSavedUser = await usersColl.findOne({ email: user.email });
+    if (isSavedUser) {
+      return res.status(200).send({
+        success: true,
+        message: "User already exists, proceeding to login",
+        insertedId: null,
+      });
+    }
     const result = await usersColl.insertOne(user);
     res.status(201).send(result);
   } catch (error) {
