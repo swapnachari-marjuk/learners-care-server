@@ -44,7 +44,26 @@ const enrollCourse = async (req, res) => {
   }
 };
 
+const getMyCourses = async (req, res) => {
+  const { email } = req.params; 
+  try {
+    const purchaseColl = getCollection("purchased_courses");
+    const result = await purchaseColl.find({ userEmail: email }).toArray();
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(500).send({ success: false, message: error.message });
+  }
+};
 
+const checkEnrollment = async (req, res) => {
+  const { email, courseId } = req.query;
+  try {
+    const purchaseColl = getCollection("purchased_courses");
+    const isEnrolled = await purchaseColl.findOne({ userEmail: email, courseId: courseId });
+    res.status(200).send({ enrolled: !!isEnrolled, message: "enrolment" });
+  } catch (error) {
+    res.status(500).send({ success: false, message: error.message });
+  }
+};
 
-
-module.exports = { enrollCourse };
+module.exports = { enrollCourse, getMyCourses, checkEnrollment };
