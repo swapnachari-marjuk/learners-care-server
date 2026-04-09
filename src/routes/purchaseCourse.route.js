@@ -6,8 +6,10 @@ const {
   checkEnrollment,
 } = require("../controllers/purchaseCourse.controller");
 
+const { verifyJWT } = require("../middlewares/auth.middleware");
+
 router.post("/", enrollCourse);
-router.get("/:email", getMyCourses);
+router.get("/:email", verifyJWT, getMyCourses);
 router.get("/", checkEnrollment);
 
 module.exports = router;
