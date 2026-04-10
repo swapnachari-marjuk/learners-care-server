@@ -75,13 +75,8 @@
 * **403:** Token is wrong or expired (Forbidden).
 * **500:** Server side error.
 
-*Connect with Developer*
-[Linkedin](https://www.linkedin.com/in/ahmad-marjuk/)
-<br>
+## 🔗 Connect with Me
 
-[Portfolio](https://marjuks-portfolio.vercel.app/)
-
-<br>
-
-[E-Mail](marjukmujaddedi@gmail.com)
-
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ahmad-marjuk/)
+[![Portfolio](https://img.shields.io/badge/Portfolio-%23000000.svg?logo=firefox&logoColor=white)](https://marjuks-portfolio.vercel.app/)
+[![Email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white)](mailto:marjukmujaddedi@gmail.com)
