@@ -76,6 +76,12 @@
 * **500:** Server side error.
 
 *Connect with Developer*
-[!Linkedin:](https://www.linkedin.com/in/ahmad-marjuk/)
-[!Portfolio:](https://marjuks-portfolio.vercel.app/)
-[!E-Mail:](marjukmujaddedi@gmail.com)
+[Linkedin](https://www.linkedin.com/in/ahmad-marjuk/)
+<br>
+
+[Portfolio](https://marjuks-portfolio.vercel.app/)
+
+<br>
+
+[E-Mail](marjukmujaddedi@gmail.com)
+
