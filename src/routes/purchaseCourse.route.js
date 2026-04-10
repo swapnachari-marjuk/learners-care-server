@@ -8,7 +8,7 @@ const {
 
 const { verifyJWT } = require("../middlewares/auth.middleware");
 
-router.post("/", enrollCourse);
+router.post("/", verifyJWT, enrollCourse);
 router.get("/:email", verifyJWT, getMyCourses);
 router.get("/", checkEnrollment);
 
