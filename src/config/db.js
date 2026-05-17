@@ -11,7 +11,6 @@ const client = new MongoClient(uri, {
   },
 });
 
-
 let db;
 
 // connecting db
@@ -26,7 +25,7 @@ const connectDB = async () => {
 
 // getting coll.s
 const getCollection = async (collectionName) => {
-  if (!db) await connectDB(); // ✅ db না থাকলে আগে connect করবে
+  if (!db) db = await connectDB(); // ✅ db না থাকলে আগে connect করবে
   return db.collection(collectionName);
 };
 
