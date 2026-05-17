@@ -1,7 +1,7 @@
 ## **Learners Care - API Documentation**
 
 ### **1. Base URL**
-`http://localhost:5000`
+`https://learners-care-server.vercel.app`
 
 ---
 
