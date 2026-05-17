@@ -4,7 +4,7 @@ const { getCollection } = require("../config/db");
 const saveCourses = async (req, res) => {
   try {
     const courseData = req.body;
-    const coursesColl = getCollection("courses");
+    const coursesColl = await getCollection("courses");
     const result = await coursesColl.insertOne(courseData);
 
     res.status(201).send(result);
@@ -12,7 +12,7 @@ const saveCourses = async (req, res) => {
     console.error(error);
     res.status(500).send({
       success: false,
-      message: "Internal Server Error during saving course",
+      message: error.message,
       error: error.message,
     });
   }
@@ -20,8 +20,8 @@ const saveCourses = async (req, res) => {
 
 const getCourses = async (req, res) => {
   try {
-    const coursesColl = getCollection("courses");
-    const {search} = req.query;
+    const coursesColl = await getCollection("courses");
+    const { search } = req.query;
 
     let query = {};
     if (search) {
@@ -33,7 +33,7 @@ const getCourses = async (req, res) => {
     console.error(err);
     res.status(500).send({
       success: false,
-      message: "internal server error during getting courses!",
+      message: err.message,
       error: err.message,
     });
   }
@@ -42,7 +42,7 @@ const getCourses = async (req, res) => {
 const getSingleCourse = async (req, res) => {
   const { id } = req.params;
   try {
-    const coursesColl = getCollection("courses");
+    const coursesColl = await getCollection("courses");
     const filter = new ObjectId(id.trim());
     const result = await coursesColl.findOne({ _id: filter });
     console.log(result);
@@ -66,7 +66,7 @@ const updateCourse = async (req, res) => {
       });
     }
 
-    const coursesColl = getCollection("courses");
+    const coursesColl = await getCollection("courses");
     const updatedData = req.body;
     const filter = { _id: new ObjectId(id) };
     const updateDoc = {
@@ -87,6 +87,7 @@ const updateCourse = async (req, res) => {
     res.status(500).send({
       success: false,
       error,
+      message: error.message,
     });
   }
 };
@@ -94,7 +95,7 @@ const updateCourse = async (req, res) => {
 const deleteCourse = async (req, res) => {
   const { id } = req.params;
   try {
-    const coursesColl = getCollection("courses");
+    const coursesColl = await getCollection("courses");
     const filter = new ObjectId(id);
     const result = await coursesColl.deleteOne({ _id: filter });
     res.status(200).send(result);
@@ -102,7 +103,7 @@ const deleteCourse = async (req, res) => {
     console.error(error);
     res.status(500).send({
       success: false,
-      error,
+      message: error.message,
     });
   }
 };

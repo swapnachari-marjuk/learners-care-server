@@ -4,8 +4,8 @@ var jwt = require("jsonwebtoken");
 
 const saveUser = async (req, res) => {
   try {
-    const { name, email, role, image, createdAt, password } = req.body;
-    const usersColl = getCollection("users");
+    const { name, email, image, password } = req.body;
+    const usersColl = await getCollection("users");
     let isSavedUser = await usersColl.findOne({ email });
     if (isSavedUser) {
       return res.status(200).send({
@@ -14,14 +14,14 @@ const saveUser = async (req, res) => {
         insertedId: null,
       });
     }
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
     const user = {
       name,
       email,
-      role,
+      role: "User",
       image,
-      createdAt,
-      password: hashedPassword,
+      createdAt: new Date(),
+      password: await bcrypt.hash(password, 10),
     };
     const result = await usersColl.insertOne(user);
     res.status(201).send(result);
@@ -30,7 +30,7 @@ const saveUser = async (req, res) => {
     console.error("Database Insert Error:", error);
     res.status(500).send({
       success: false,
-      message: "Internal Server Error during saving user",
+      message: error.message,
       error: error.message,
     });
   }
@@ -38,7 +38,7 @@ const saveUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const usersColl = getCollection("users");
+  const usersColl = await getCollection("users");
   try {
     // finding the user based on email
     const user = await usersColl.findOne({ email });

@@ -16,13 +16,17 @@ let db;
 
 // connecting db
 const connectDB = async () => {
+  if (db) return db;
+
   await client.connect();
   db = client.db("learnersCareDb");
-  console.log("MongoDB Connected via Shared Utility!");
+  console.log("MongoDB Connected!");
+  return db;
 };
 
 // getting coll.s
-const getCollection = (collectionName) => {
+const getCollection = async (collectionName) => {
+  if (!db) await connectDB(); // ✅ db না থাকলে আগে connect করবে
   return db.collection(collectionName);
 };
 

@@ -6,7 +6,7 @@ const enrollCourse = async (req, res) => {
     const enrollmentData = req.body;
     const { userEmail, courseId, transactionId, price } = enrollmentData;
 
-    const purchaseColl = getCollection("purchased_courses");
+    const purchaseColl = await getCollection("purchased_courses");
 
     // checking if the user enrolled
     const alreadyPurchased = await purchaseColl.findOne({
@@ -46,7 +46,7 @@ const enrollCourse = async (req, res) => {
 const getMyCourses = async (req, res) => {
   const { email } = req.params;
   try {
-    const purchaseColl = getCollection("purchased_courses");
+    const purchaseColl = await getCollection("purchased_courses");
     const pipeline = [
       { $match: { userEmail: email } },
 
@@ -64,7 +64,6 @@ const getMyCourses = async (req, res) => {
           as: "courseDetails", // নতুন যে অ্যারেতে ডাটা জমা হবে
         },
       },
-      
     ];
     const result = await purchaseColl.aggregate(pipeline).toArray();
     res.status(200).send(result);
@@ -77,13 +76,19 @@ const getMyCourses = async (req, res) => {
 
 const checkEnrollment = async (req, res) => {
   const { email, courseId } = req.query;
+  console.log(email);
   try {
-    const purchaseColl = getCollection("purchased_courses");
+    const purchaseColl = await getCollection("purchased_courses");
     const isEnrolled = await purchaseColl.findOne({
       userEmail: email,
       courseId: courseId,
     });
-    res.status(200).send({ enrolled: !!isEnrolled, message: "enrolment" });
+    res.status(200).send({
+      enrolled: !!isEnrolled,
+      message: isEnrolled
+        ? "You have already enrolled in this course"
+        : "you can enrol in this course",
+    });
   } catch (error) {
     res.status(500).send({ success: false, message: error.message });
   }
