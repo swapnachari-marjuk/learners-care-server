@@ -93,6 +93,8 @@ const loginUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      image: user.image,
+      createdAt: user.createdAt,
     };
 
     // generating a JWT token with the user's email and role as payload
@@ -147,6 +149,7 @@ const refreshToken = async (req, res) => {
   try {
     // ১. ক্লায়েন্টের কুকি থেকে রিফ্রেশ টোকেনটি নেওয়া
     const cookies = req.cookies;
+    // console.log(cookies);
     if (!cookies?.refreshToken)
       return res
         .status(401)
@@ -155,29 +158,37 @@ const refreshToken = async (req, res) => {
     const refreshToken = cookies.refreshToken;
 
     // ২. রিফ্রেশ টোকেনটি ভেরিফাই করা (এখানে রিফ্রেশ সিক্রেট ব্যবহার হচ্ছে)
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, (err, decoded) => {
-      if (err)
-        return res
-          .status(403)
-          .json({ message: "Forbidden: Invalid or expired refresh token" });
+    jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET,
+      (err, decoded) => {
+        if (err)
+          return res
+            .status(403)
+            .json({ message: "Forbidden: Invalid or expired refresh token" });
 
-      // ৩. টোকেন ভ্যালিড হলে নতুন একটি পে-লোড তৈরি করা
-      const tokenPayload = {
-        name: decoded.name,
-        email: decoded.email,
-        role: decoded.role,
-      };
+        // ৩. টোকেন ভ্যালিড হলে নতুন একটি পে-লোড তৈরি করা
+        const tokenPayload = {
+          name: decoded.name,
+          email: decoded.email,
+          role: decoded.role,
+          image: decoded.image,
+          createdAt: decoded.createdAt,
+        };
 
-      // ৪. নতুন একটি নতুন স্বল্পমেয়াদী Access Token জেনারেট করা
-      const newAccessToken = jwt.sign(
-        tokenPayload,
-        process.env.JWT_ACCESS_SECRET,
-        { expiresIn: "30m" },
-      );
+        console.log(tokenPayload);
 
-      // ৫. নতুন Access Token-টি রেসপন্স হিসেবে ফ্রন্টএন্ডে পাঠানো
-      res.json({ accessToken: newAccessToken });
-    });
+        // ৪. নতুন একটি নতুন স্বল্পমেয়াদী Access Token জেনারেট করা
+        const newAccessToken = jwt.sign(
+          tokenPayload,
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "30m" },
+        );
+
+        // ৫. নতুন Access Token-টি রেসপন্স হিসেবে ফ্রন্টএন্ডে পাঠানো
+        res.send({ accessToken: newAccessToken, userData: tokenPayload });
+      },
+    );
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
   }

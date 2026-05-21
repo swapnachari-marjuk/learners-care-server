@@ -4,6 +4,7 @@ const cors = require("cors");
 const userRouter = require("../src/routes/user.route");
 const courseRouter = require("../src/routes/course.route");
 const purchaseRouter = require("../src/routes/purchaseCourse.route");
+const cookieParser = require("cookie-parser");
 const app = express();
 
 app.use(
@@ -13,6 +14,7 @@ app.use(
   }),
 );
 app.use(express.json());
+app.use(cookieParser());
 
 app.use("/auth", userRouter);
 app.use("/courses", courseRouter);
